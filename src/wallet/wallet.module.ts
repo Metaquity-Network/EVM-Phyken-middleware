@@ -12,4 +12,4 @@ import { Wallet, WalletSchema } from './wallet.schema';
   controllers: [WalletController],
   exports: [WalletService],
 })
-export class UsersModule {}
+export class WalletModule {}

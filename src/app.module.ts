@@ -7,10 +7,11 @@ import {
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './wallet/wallet.module';
+import { WalletModule } from './wallet/wallet.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { AppService } from './app.service';
       inject: [ConfigService],
     }),
     AuthModule,
+    WalletModule,
     UsersModule,
   ],
   controllers: [AppController],

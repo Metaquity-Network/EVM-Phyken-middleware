@@ -2,6 +2,7 @@ import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ethers } from 'ethers';
 import { WalletService } from '../wallet/wallet.service';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthService {
@@ -10,6 +11,7 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly walletService: WalletService,
+    private readonly userService: UsersService,
   ) {}
 
   async validateWallet(
@@ -27,6 +29,10 @@ export class AuthService {
           await this.walletService.update(address, token);
         } else {
           await this.walletService.create(address, token);
+          await this.userService.create({
+            wallet: address,
+            emailAddress: '',
+          });
         }
         return token;
       } else {
@@ -49,6 +55,15 @@ export class AuthService {
         'Internal Server Error',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    }
+  }
+
+  async validateToken(token: string): Promise<boolean> {
+    try {
+      const decoded = this.jwtService.verify(token);
+      return !!decoded;
+    } catch (error) {
+      return false;
     }
   }
 }

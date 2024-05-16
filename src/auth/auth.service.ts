@@ -1,7 +1,7 @@
 import { Injectable, Logger, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ethers } from 'ethers';
-import { UsersService } from '../users/users.service';
+import { WalletService } from '../wallet/wallet.service';
 
 @Injectable()
 export class AuthService {
@@ -9,7 +9,7 @@ export class AuthService {
 
   constructor(
     private readonly jwtService: JwtService,
-    private readonly usersService: UsersService,
+    private readonly walletService: WalletService,
   ) {}
 
   async validateWallet(
@@ -22,11 +22,11 @@ export class AuthService {
       if (recoveredAddress.toLowerCase() === address.toLowerCase()) {
         const token = this.jwtService.sign({ address });
 
-        const user = await this.usersService.findOne(address);
-        if (user) {
-          await this.usersService.update(address, token);
+        const wallet = await this.walletService.findOne(address);
+        if (wallet) {
+          await this.walletService.update(address, token);
         } else {
-          await this.usersService.create(address, token);
+          await this.walletService.create(address, token);
         }
         return token;
       } else {

@@ -7,7 +7,7 @@ import {
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
+import { UsersModule } from './wallet/wallet.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';

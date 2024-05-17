@@ -3,6 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ethers } from 'ethers';
 import { WalletService } from '../wallet/wallet.service';
 import { UsersService } from 'src/users/users.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +13,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly walletService: WalletService,
     private readonly userService: UsersService,
+    private configService: ConfigService,
   ) {}
 
   async validateWallet(
@@ -19,21 +21,31 @@ export class AuthService {
     signature: string,
   ): Promise<string | null> {
     const message = `Sign this message to authenticate with Phyken. Address: ${address}`;
+    console.log(message);
     try {
       const recoveredAddress = ethers.verifyMessage(message, signature);
       if (recoveredAddress.toLowerCase() === address.toLowerCase()) {
-        const token = this.jwtService.sign({ address });
+        console.log('recoveredAddress', recoveredAddress);
+        // const token = this.jwtService.sign({ address });
+        const token = await this.jwtService.signAsync(
+          { wallet: address },
+          {
+            secret: this.configService.getOrThrow('AUTH_SECRET_KEY'),
+          },
+        );
 
-        const wallet = await this.walletService.findOne(address);
-        if (wallet) {
-          await this.walletService.update(address, token);
-        } else {
-          await this.walletService.create(address, token);
-          await this.userService.create({
-            wallet: address,
-            emailAddress: '',
-          });
-        }
+        console.log('tokentokentoken', token);
+
+        // const wallet = await this.walletService.findOne(address);
+        // if (wallet) {
+        //   await this.walletService.update(address, token);
+        // } else {
+        //   await this.walletService.create(address, token);
+        //   await this.userService.create({
+        //     wallet: address,
+        //     emailAddress: '',
+        //   });
+        // }
         return token;
       } else {
         this.logger.warn(

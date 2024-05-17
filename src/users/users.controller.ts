@@ -62,7 +62,7 @@ export class UsersController {
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @HttpCode(HttpStatus.OK)
   getUserDetail(@Req() req: Request) {
-    const email = req['email'];
-    return this.usersService.getUserDetail(email.email);
+    console.log(req.headers.cookie);
+    return '';
   }
 }

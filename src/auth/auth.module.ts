@@ -13,10 +13,7 @@ import { User, UserSchema } from 'src/users/user.schema';
 @Module({
   imports: [
     PassportModule,
-    JwtModule.register({
-      secret: 'your_jwt_secret_key',
-      signOptions: { expiresIn: '60m' },
-    }),
+    JwtModule.register({}),
     WalletModule,
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],

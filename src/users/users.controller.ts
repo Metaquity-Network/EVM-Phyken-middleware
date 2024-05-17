@@ -61,8 +61,8 @@ export class UsersController {
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @HttpCode(HttpStatus.OK)
-  getUserDetail(@Req() req: Request) {
-    console.log(req.headers.cookie);
-    return '';
+  async getUserDetail(@Req() req: Request) {
+    const wallet = req['wallet'];
+    return await this.usersService.getUserDetail(wallet);
   }
 }

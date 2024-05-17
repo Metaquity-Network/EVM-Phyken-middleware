@@ -21,12 +21,9 @@ export class AuthService {
     signature: string,
   ): Promise<string | null> {
     const message = `Sign this message to authenticate with Phyken. Address: ${address}`;
-    console.log(message);
     try {
       const recoveredAddress = ethers.verifyMessage(message, signature);
       if (recoveredAddress.toLowerCase() === address.toLowerCase()) {
-        console.log('recoveredAddress', recoveredAddress);
-        // const token = this.jwtService.sign({ address });
         const token = await this.jwtService.signAsync(
           { wallet: address },
           {
@@ -34,18 +31,16 @@ export class AuthService {
           },
         );
 
-        console.log('tokentokentoken', token);
-
-        // const wallet = await this.walletService.findOne(address);
-        // if (wallet) {
-        //   await this.walletService.update(address, token);
-        // } else {
-        //   await this.walletService.create(address, token);
-        //   await this.userService.create({
-        //     wallet: address,
-        //     emailAddress: '',
-        //   });
-        // }
+        const wallet = await this.walletService.findOne(address);
+        if (wallet) {
+          await this.walletService.update(address, token);
+        } else {
+          await this.walletService.create(address, token);
+          await this.userService.create({
+            wallet: address,
+            emailAddress: '',
+          });
+        }
         return token;
       } else {
         this.logger.warn(
@@ -67,15 +62,6 @@ export class AuthService {
         'Internal Server Error',
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
-    }
-  }
-
-  async validateToken(token: string): Promise<boolean> {
-    try {
-      const decoded = this.jwtService.verify(token);
-      return !!decoded;
-    } catch (error) {
-      return false;
     }
   }
 }

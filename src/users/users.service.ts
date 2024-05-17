@@ -56,9 +56,9 @@ export class UsersService {
     }
   }
 
-  async getUserDetail(email: string) {
+  async getUserDetail(wallet: string) {
     try {
-      return await this.userModel.findOne({ userEmail: email });
+      return await this.userModel.findOne({ wallet: wallet });
     } catch (error) {
       throw new HttpException(
         'Error fetching user by email',

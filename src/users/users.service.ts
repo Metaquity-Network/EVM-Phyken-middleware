@@ -67,21 +67,38 @@ export class UsersService {
     }
   }
 
-  async updateUser(user: any, email: string) {
+  async updateUserEmail(email: any, wallet: string) {
     try {
       return await this.userModel
         .findOneAndUpdate(
           {
-            userEmail: email,
+            wallet: wallet,
           },
           {
             $set: {
-              userInfo: {
-                ...user,
-                address: {
-                  ...user,
-                },
-              },
+              emailAddress: email,
+            },
+          },
+        )
+        .exec();
+    } catch (error) {
+      throw new HttpException(
+        'Error updating user',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  async updateUserDetails(userDetails: any, wallet: string) {
+    try {
+      return await this.userModel
+        .findOneAndUpdate(
+          {
+            wallet: wallet,
+          },
+          {
+            $set: {
+              ...userDetails,
             },
           },
         )

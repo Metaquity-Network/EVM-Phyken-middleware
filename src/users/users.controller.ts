@@ -38,7 +38,21 @@ export class UsersController {
     return await this.usersService.create(userDto);
   }
 
-  @Post('updateUser')
+  @Post('updateUserEmail')
+  @ApiOperation({ summary: 'Update user email' })
+  @ApiResponse({
+    status: 200,
+    description: 'User email updated successfully',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @HttpCode(HttpStatus.OK)
+  async updateUser(@Req() req: Request, @Body() userUpdateDto: any) {
+    const wallet = req['wallet'];
+    return await this.usersService.updateUserEmail(userUpdateDto.email, wallet);
+  }
+
+  @Post('updateUserDetails')
   @ApiOperation({ summary: 'Update user details' })
   @ApiResponse({
     status: 200,
@@ -47,9 +61,9 @@ export class UsersController {
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @HttpCode(HttpStatus.OK)
-  async updateUser(@Req() req: Request, @Body() userUpdateDto: any) {
-    const userDetails = req['email'];
-    return await this.usersService.updateUser(userUpdateDto, userDetails.email);
+  async updateUserDetails(@Req() req: Request, @Body() userUpdateDto: any) {
+    const wallet = req['wallet'];
+    return await this.usersService.updateUserDetails(userUpdateDto, wallet);
   }
 
   @Get()

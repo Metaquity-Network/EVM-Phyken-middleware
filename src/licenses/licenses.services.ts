@@ -60,16 +60,13 @@ export class LicensesService {
     }
   }
 
-  async getLicenseByUser(wallet: string): Promise<Licenses | []> {
+  async getLicenseByUser(wallet: string) {
     try {
+      console.log('Getting license');
       const userLicenses = await this.licensesModel
-        .findOne({ createdBy: wallet })
+        .find({ createdBy: wallet })
         .exec();
-      if (!userLicenses) {
-        return userLicenses;
-      } else {
-        return [];
-      }
+      return userLicenses;
     } catch (error) {
       console.error('Error fetching license by user:', error);
       throw new HttpException(

@@ -62,7 +62,6 @@ export class LicensesService {
 
   async getLicenseByUser(wallet: string) {
     try {
-      console.log('Getting license');
       const userLicenses = await this.licensesModel
         .find({ createdBy: wallet })
         .exec();

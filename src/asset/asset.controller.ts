@@ -45,8 +45,8 @@ export class AssetController {
   @HttpCode(HttpStatus.OK)
   @ApiBody({ type: AssetDto })
   async addNewAsset(@Req() req: Request, @Body() assetDto: AssetDto) {
-    const user = req['email'];
-    return await this.assetService.addNewAsset(user, assetDto);
+    const wallet = req['wallet'];
+    return await this.assetService.addNewAsset(wallet, assetDto);
   }
 
   @Get('/getAssets')
@@ -58,8 +58,8 @@ export class AssetController {
   })
   @ApiResponse({ status: 400, description: 'Invalid request.' })
   async getAllAssets(@Req() req: Request) {
-    const user = req['email'];
-    return await this.assetService.getAllAssets(user);
+    const wallet = req['wallet'];
+    return await this.assetService.getAllAssets(wallet);
   }
 
   @Get('/getAssets/active')
@@ -69,8 +69,9 @@ export class AssetController {
     status: 200,
     description: 'List of active assets retrieved successfully.',
   })
-  async getAllActiveAssets() {
-    return await this.assetService.getAllActiveAssets();
+  async getAllActiveAssets(@Req() req: Request) {
+    const wallet = req['wallet'];
+    return await this.assetService.getAllActiveAssets(wallet);
   }
 
   @Get('/getAssetById/:id')
@@ -85,11 +86,11 @@ export class AssetController {
     @Req() req: Request,
     @Param('id', new ParseUUIDPipe({ version: '4' })) assetId: string,
   ) {
-    const user = req['email'];
-    return await this.assetService.getAssetById(user, assetId);
+    const wallet = req['wallet'];
+    return await this.assetService.getAssetById(wallet, assetId);
   }
 
-  @Post('/updateNFT')
+  @Post('/updateNFTDetails/:id')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Update NFT details of an asset' })
   @ApiResponse({

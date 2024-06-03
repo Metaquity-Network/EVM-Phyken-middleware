@@ -1,37 +1,39 @@
-import { HttpModule } from '@nestjs/axios';
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AssetController } from 'src/asset/asset.controller';
 import { AssetService } from 'src/asset/asset.service';
-import { AssetSchema } from 'src/asset/asset.schema';
-import { UploadService } from 'src/upload/upload.service';
+import { Asset, AssetSchema } from 'src/asset/asset.schema';
 import { JwtService } from '@nestjs/jwt';
 import { AuthModule } from 'src/auth/auth.module';
-import { AuthSchema } from 'src/auth/entity/auth.entity';
-import { LicensesSchema } from 'src/licenses/entity/licenses.entity';
 import { LicensesService } from 'src/licenses/licenses.services';
+import { Licenses, LicensesSchema } from 'src/licenses/licenses.schema';
+import { Wallet, WalletSchema } from 'src/wallet/wallet.schema';
+import { AuthService } from 'src/auth/auth.service';
+import { WalletService } from 'src/wallet/wallet.service';
+import { UsersService } from 'src/users/users.service';
+import { User, UserSchema } from 'src/users/user.schema';
 
 @Module({
   imports: [
     MongooseModule.forFeature([
       {
-        name: 'asset',
+        name: Asset.name,
         schema: AssetSchema,
       },
-      { name: 'auth', schema: AuthSchema },
-      { name: 'licenses', schema: LicensesSchema },
+      { name: User.name, schema: UserSchema },
+      { name: Wallet.name, schema: WalletSchema },
+      { name: Licenses.name, schema: LicensesSchema },
     ]),
-    HttpModule.registerAsync({
-      imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        maxRedirects: configService.getOrThrow('HTTP_MAX_REDIRECTS'),
-      }),
-      inject: [ConfigService],
-    }),
     AuthModule,
   ],
   controllers: [AssetController],
-  providers: [AssetService, UploadService, JwtService, LicensesService],
+  providers: [
+    AssetService,
+    LicensesService,
+    JwtService,
+    AuthService,
+    WalletService,
+    UsersService,
+  ],
 })
 export class AssetModule {}

@@ -74,4 +74,18 @@ export class LicensesService {
       );
     }
   }
+  async verifyUploadedLicense(licenseID: string, wallet: any) {
+    try {
+      const userLicenses = await this.licensesModel
+        .find({ createdBy: wallet, licenseID: licenseID })
+        .exec();
+      return userLicenses;
+    } catch (error) {
+      console.error('Error fetching license by user:', error);
+      throw new HttpException(
+        'Error fetching license by user',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }

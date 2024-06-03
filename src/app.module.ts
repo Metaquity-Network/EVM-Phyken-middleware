@@ -13,6 +13,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { LicensesModule } from './licenses/licenses.module';
+import { AssetModule } from './asset/asset.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { LicensesModule } from './licenses/licenses.module';
     WalletModule,
     UsersModule,
     LicensesModule,
+    AssetModule,
   ],
   controllers: [AppController],
   providers: [AppService],

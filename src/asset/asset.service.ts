@@ -6,24 +6,25 @@ import {
 } from '@nestjs/common';
 import { AssetDto } from 'src/asset/dto/asset.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { AssetSchema } from 'src/asset/asset.schema';
+import { Asset } from 'src/asset/asset.schema';
 import mongoose, { Model } from 'mongoose';
 import { LicensesService } from 'src/licenses/licenses.services';
 import { v4 as uuidv4 } from 'uuid';
 import { AssetNFTDetailsDto } from 'src/asset/dto/assetNFTDetails.dto';
+import { AssetModule } from './asset.module';
 
 @Injectable()
 export class AssetService {
   constructor(
-    @InjectModel('asset') private assetModel: Model<AssetSchema>,
+    @InjectModel(Asset.name) private assetModel: Model<AssetModule>,
     private licensesServices: LicensesService,
   ) {}
 
-  async addNewAsset(userEmail: string, assetDto: AssetDto) {
+  async addNewAsset(wallet: string, assetDto: AssetDto) {
     try {
-      const licenses = await this.licensesServices.getLicenseByUser(
+      const licenses = await this.licensesServices.verifyUploadedLicense(
         assetDto.licenseID,
-        userEmail,
+        wallet,
       );
       if (!licenses) {
         throw new HttpException('Invalid License Id', HttpStatus.BAD_REQUEST);
@@ -32,9 +33,9 @@ export class AssetService {
       const createdAsset = await this.assetModel.create({
         id: uuidv4().toString(),
         ...assetDto,
-        createdBy: userEmail,
+        createdBy: wallet,
         assetStatus: 'PENDING',
-        //TODO: remove this
+        //TODO: remove the hardcoded asset values
         tags: ['New', 'Asset'],
         totalValue: 1200000,
         lockedValue: 1000000,
@@ -49,9 +50,9 @@ export class AssetService {
     }
   }
 
-  async getAllAssets(email: string) {
+  async getAllAssets(wallet: string) {
     try {
-      return await this.assetModel.find({});
+      return await this.assetModel.find({ createdBy: wallet }).exec();
     } catch (error) {
       throw new HttpException(
         'Error fetching assets',
@@ -60,10 +61,11 @@ export class AssetService {
     }
   }
 
-  async getAllActiveAssets() {
+  async getAllActiveAssets(wallet: string) {
     try {
       return await this.assetModel.find({
         assetStatus: 'ACTIVE',
+        createdBy: wallet,
       });
     } catch (error) {
       throw new HttpException(

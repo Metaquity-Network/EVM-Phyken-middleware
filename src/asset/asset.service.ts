@@ -43,6 +43,7 @@ export class AssetService {
         lockPeriod: 6,
         minimumInvestment: 10000,
         dealValue: 1200000,
+        createdAt: new Date(),
       });
       return createdAsset;
     } catch (error) {

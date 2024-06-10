@@ -9,11 +9,9 @@ import {
   Post,
   Req,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { AssetService } from 'src/asset/asset.service';
 import { AssetDto } from 'src/asset/dto/asset.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -25,7 +23,6 @@ import { AssetNFTDetailsDto } from 'src/asset/dto/assetNFTDetails.dto';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 
 @Controller({
-  version: '1',
   path: 'asset',
 })
 @ApiBearerAuth()
@@ -35,7 +32,6 @@ export class AssetController {
   constructor(private readonly assetService: AssetService) {}
 
   @Post('uploadAsset')
-  @UseInterceptors(FileInterceptor('file'))
   @ApiOperation({ summary: 'Create new asset for the user' })
   @ApiResponse({
     status: 200,

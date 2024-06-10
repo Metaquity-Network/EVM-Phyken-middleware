@@ -86,10 +86,10 @@ export class Asset {
   @Prop({ required: true })
   licenseID: string;
 
-  @Prop({ type: NftDetailsSchema, required: true })
+  @Prop({ type: NftDetailsSchema, required: false })
   nftDetails: NftDetails;
 
-  @Prop({ type: NftFractionalizationDetailsSchema, required: true })
+  @Prop({ type: NftFractionalizationDetailsSchema, required: false })
   nftFractionalizationDetails: NftFractionalizationDetails;
 
   @Prop({ required: true })

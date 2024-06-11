@@ -14,6 +14,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { LicensesModule } from './licenses/licenses.module';
 import { AssetModule } from './asset/asset.module';
+import { WaitlistModule } from './waitlist/waitlist.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { AssetModule } from './asset/asset.module';
     UsersModule,
     LicensesModule,
     AssetModule,
+    WaitlistModule,
   ],
   controllers: [AppController],
   providers: [AppService],

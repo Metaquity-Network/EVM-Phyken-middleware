@@ -5,7 +5,7 @@ export type WaitlistDocument = Waitlist & Document;
 
 @Schema()
 export class Waitlist {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   email: string;
 
   @Prop({ required: true })

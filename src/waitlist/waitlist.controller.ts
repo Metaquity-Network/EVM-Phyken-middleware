@@ -1,10 +1,16 @@
 import { Controller, Post, Body, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import { WaitlistDto } from './dto/waitlist.dto';
 import { WaitlistService } from './waitlist.service';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 
 @ApiTags('waitlist')
+@ApiBearerAuth()
 @Controller('waitlist')
 @UseGuards(AuthGuard)
 export class WaitlistController {

@@ -19,6 +19,7 @@ export class AuthService {
   async validateWallet(
     address: string,
     signature: string,
+    userType: string,
   ): Promise<string | null> {
     const message = `Sign this message to authenticate with Phyken. Address: ${address}`;
     try {
@@ -39,6 +40,7 @@ export class AuthService {
           await this.userService.create({
             wallet: address,
             emailAddress: '',
+            userType: userType,
           });
         }
         return token;

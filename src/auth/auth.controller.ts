@@ -24,6 +24,7 @@ export class AuthController {
       const token = await this.authService.validateWallet(
         authDto.address,
         authDto.signature,
+        authDto.userType,
       );
       if (token) {
         return token;

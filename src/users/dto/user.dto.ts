@@ -37,6 +37,11 @@ export class UserDto {
   @IsEmail()
   emailAddress: string;
 
+  @ApiProperty({ description: 'INVESTOR', required: false })
+  @IsOptional()
+  @IsString()
+  userType: string;
+
   @ApiProperty({
     description: 'Type of identification document',
     required: false,

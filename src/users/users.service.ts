@@ -20,6 +20,7 @@ export class UsersService {
         firstLogin: new Date(),
         profileStatus: 'ACTIVE',
         kycStatus: 'PENDING',
+        userType: user.userType,
       });
       return await createdUser.save();
     } catch (error) {

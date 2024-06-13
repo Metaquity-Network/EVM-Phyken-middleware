@@ -46,6 +46,9 @@ export class User {
 
   @Prop({ required: false })
   kycStatus: string;
+
+  @Prop({ required: true })
+  userType: string;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

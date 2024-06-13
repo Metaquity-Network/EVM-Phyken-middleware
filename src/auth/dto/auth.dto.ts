@@ -9,4 +9,8 @@ export class AuthDto {
   @ApiProperty({ example: '0x5678...' })
   @IsNotEmpty()
   signature: string;
+
+  @ApiProperty({ example: 'INVESTOR' })
+  @IsNotEmpty()
+  userType: string;
 }

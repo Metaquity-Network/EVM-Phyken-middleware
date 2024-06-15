@@ -29,6 +29,15 @@ export class Waitlist {
   @Prop({ required: true })
   agreeToStoreData: boolean;
 
+  @Prop()
+  verificationHash: string;
+
+  @Prop()
+  timestamp: string;
+
+  @Prop({ default: false })
+  isVerified: boolean;
+
   @Prop({ default: Date.now, required: true })
   createdAt: Date;
 }

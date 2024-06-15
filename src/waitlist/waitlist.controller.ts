@@ -1,9 +1,18 @@
-import { Controller, Post, Body, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  UseGuards,
+  Get,
+  Query,
+  Res,
+} from '@nestjs/common';
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBearerAuth,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { WaitlistDto } from './dto/waitlist.dto';
 import { WaitlistService } from './waitlist.service';
@@ -26,5 +35,30 @@ export class WaitlistController {
   @ApiResponse({ status: 500, description: 'Internal Server Error.' })
   async create(@Body() createWaitlistDto: WaitlistDto) {
     return this.waitlistService.create(createWaitlistDto);
+  }
+
+  @Get('verify')
+  @ApiOperation({ summary: 'Verify email using hash' })
+  @ApiQuery({
+    name: 'hash',
+    required: true,
+    description: 'Hash for email verification',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Email verified successfully',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Invalid or expired verification link',
+  })
+  @ApiResponse({ status: 500, description: 'Internal Server Error.' })
+  async verifyEmail(@Query('hash') hash: string, @Res() res) {
+    const isVerified = await this.waitlistService.verifyEmail(hash);
+    if (isVerified) {
+      return res.status(200).send('Email verified successfully');
+    } else {
+      return res.status(400).send('Invalid or expired verification link');
+    }
   }
 }

@@ -11,8 +11,8 @@ export class MailerService {
 
   constructor(private readonly configService: ConfigService<AllConfigType>) {
     this.transporter = nodemailer.createTransport({
-      host: this.configService.getOrThrow('mail.host', { infer: true }), // Corrected
-      port: this.configService.getOrThrow('mail.port', { infer: true }), // Corrected
+      host: this.configService.getOrThrow('mail.host', { infer: true }),
+      port: this.configService.getOrThrow('mail.port', { infer: true }),
       ignoreTLS: this.configService.getOrThrow('mail.ignoreTLS', {
         infer: true,
       }),

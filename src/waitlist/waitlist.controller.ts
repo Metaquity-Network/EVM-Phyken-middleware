@@ -12,7 +12,7 @@ import { AuthGuard } from 'src/auth/guard/auth.guard';
 @ApiTags('waitlist')
 @ApiBearerAuth()
 @Controller('waitlist')
-// @UseGuards(AuthGuard)
+@UseGuards(AuthGuard)
 export class WaitlistController {
   constructor(private readonly waitlistService: WaitlistService) {}
 

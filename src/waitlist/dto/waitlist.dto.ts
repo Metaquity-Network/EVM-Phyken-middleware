@@ -6,6 +6,7 @@ import {
   IsString,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsGreaterThan } from './isGreaterThanConstraint';
 
 export class WaitlistDto {
   @ApiProperty({ description: 'The email of the investor' })
@@ -31,6 +32,7 @@ export class WaitlistDto {
   @ApiProperty({ description: 'The amount the investor plans to invest' })
   @IsString()
   @IsNotEmpty()
+  @IsGreaterThan({ message: 'Investment amount must be greater than 100' })
   investmentAmount: string;
 
   @ApiPropertyOptional({

@@ -21,8 +21,13 @@ export class WaitlistService {
     try {
       const createdInvestment = new this.waitlistModel(waitlistDto);
       const savedWaitlist = await createdInvestment.save();
-
-      this.sendVerificationEmail(waitlistDto);
+      await this.mailService.verifyWaitlistEmail({
+        to: waitlistDto.email,
+        firstName: waitlistDto.firstName,
+        data: {
+          hash: 'your-hash-value-here',
+        },
+      });
       return savedWaitlist;
     } catch (error) {
       if (error.code === 11000) {
@@ -31,22 +36,5 @@ export class WaitlistService {
       console.error('Failed to create waitlist entry:', error);
       throw new InternalServerErrorException('Internal server error');
     }
-  }
-
-  private async sendVerificationEmail(waitlistDto: WaitlistDto): Promise<void> {
-    try {
-      this.mailService.verifyWaitlistEmail({
-        to: waitlistDto.email,
-        firstName: waitlistDto.firstName,
-        data: {
-          hash: 'your-hash-value-here',
-        },
-      });
-    } catch (error) {
-      console.error('Error sending verification email:', error);
-      // Optional: throw error if you want to handle it higher up the chain
-      // throw error;
-    }
-    return;
   }
 }

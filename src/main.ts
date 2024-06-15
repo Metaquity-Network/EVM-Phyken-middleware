@@ -10,10 +10,13 @@ import * as express from 'express';
 import { useContainer } from 'class-validator';
 import validationOptions from './utils/validation-options';
 import { ResolvePromisesInterceptor } from './utils/serializer.interceptor';
+import { ConfigService } from '@nestjs/config';
+import { AllConfigType } from './config/config.types';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: true });
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
+  const configService = app.get(ConfigService<AllConfigType>);
 
   app.enableShutdownHooks();
 
@@ -39,6 +42,6 @@ async function bootstrap() {
   app.use(express.json({ limit: '10mb' }));
   app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-  await app.listen(parseInt(process.env.PORT, 10) || 3000);
+  await app.listen(configService.getOrThrow('app.port', { infer: true }));
 }
 bootstrap();

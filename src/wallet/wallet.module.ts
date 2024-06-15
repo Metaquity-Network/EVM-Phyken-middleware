@@ -9,6 +9,7 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { WaitlistService } from 'src/waitlist/waitlist.service';
 import { AuthService } from 'src/auth/auth.service';
 import { UsersService } from 'src/users/users.service';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UsersService } from 'src/users/users.service';
       { name: User.name, schema: UserSchema },
     ]),
     JwtModule.register({}),
+    MailModule,
   ],
   providers: [
     WalletService,

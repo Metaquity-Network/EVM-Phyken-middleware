@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { I18nContext } from 'nestjs-i18n';
 import { MailerService } from '../mailer/mailer.service';
-import path from 'path';
+import * as ejs from 'ejs';
+import * as path from 'path';
 import { AllConfigType } from 'src/config/config.types';
 import { MailData } from './interface/mail-data.interface';
-import { MaybeType } from 'src/utils/types/maybe.type';
 
 @Injectable()
 export class MailService {
@@ -17,50 +16,33 @@ export class MailService {
   async verifyWaitlistEmail(
     mailData: MailData<{ hash: string }>,
   ): Promise<void> {
-    const i18n = I18nContext.current();
-    let emailConfirmTitle: MaybeType<string>;
-    let text1: MaybeType<string>;
-    let text2: MaybeType<string>;
-    let text3: MaybeType<string>;
+    const frontendDomain = this.configService.getOrThrow('app.frontendDomain', {
+      infer: true,
+    });
+    const confirmationUrl = new URL(`${frontendDomain}/confirm-email`);
+    confirmationUrl.searchParams.set('hash', mailData.data.hash);
 
-    if (i18n) {
-      [emailConfirmTitle, text1, text2, text3] = await Promise.all([
-        i18n.t('common.confirmEmail'),
-        i18n.t('confirm-email.text1'),
-        i18n.t('confirm-email.text2'),
-        i18n.t('confirm-email.text3'),
-      ]);
-    }
-
-    const url = new URL(
-      this.configService.getOrThrow('app.frontendDomain', {
+    const workingDirectory =
+      this.configService.getOrThrow('app.workingDirectory', {
         infer: true,
-      }) + '/confirm-email',
+      }) || process.cwd();
+    const templatePath = path.join(
+      workingDirectory,
+      'src',
+      'mail',
+      'mail-templates',
+      'verification-email.ejs',
     );
-    url.searchParams.set('hash', mailData.data.hash);
 
-    await this.mailerService.sendMail({
+    const html = await ejs.renderFile(templatePath, {
+      user: { name: mailData.firstName },
+      url: confirmationUrl.toString(),
+    });
+
+    return await this.mailerService.sendMail({
       to: mailData.to,
-      subject: emailConfirmTitle,
-      text: `${url.toString()} ${emailConfirmTitle}`,
-      templatePath: path.join(
-        this.configService.getOrThrow('app.workingDirectory', {
-          infer: true,
-        }),
-        'src',
-        'mail',
-        'mail-templates',
-        'activation.hbs',
-      ),
-      context: {
-        title: emailConfirmTitle,
-        url: url.toString(),
-        actionTitle: emailConfirmTitle,
-        app_name: this.configService.get('app.name', { infer: true }),
-        text1,
-        text2,
-        text3,
-      },
+      subject: 'Phyken Network Email verification',
+      html: html,
     });
   }
 }

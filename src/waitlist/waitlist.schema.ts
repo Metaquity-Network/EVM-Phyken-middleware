@@ -14,13 +14,13 @@ export class Waitlist {
   @Prop({ required: true })
   lastName: string;
 
-  @Prop()
+  @Prop({ required: true })
   nationality: string;
 
   @Prop({ required: true })
   investmentAmount: string;
 
-  @Prop()
+  @Prop({ required: false })
   additionalInfo: string;
 
   @Prop({ default: false })
@@ -29,7 +29,7 @@ export class Waitlist {
   @Prop({ required: true })
   agreeToStoreData: boolean;
 
-  @Prop({ default: Date.now })
+  @Prop({ default: Date.now, required: true })
   createdAt: Date;
 }
 

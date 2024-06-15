@@ -8,18 +8,24 @@ import { AllConfigType } from 'src/config/config.types';
 @Injectable()
 export class MailerService {
   private readonly transporter: nodemailer.Transporter;
+
   constructor(private readonly configService: ConfigService<AllConfigType>) {
     this.transporter = nodemailer.createTransport({
-      host: configService.get('mail.host', { infer: true }),
-      port: configService.get('mail.port', { infer: true }),
-      ignoreTLS: configService.get('mail.ignoreTLS', { infer: true }),
-      secure: configService.get('mail.secure', { infer: true }),
-      requireTLS: configService.get('mail.requireTLS', { infer: true }),
+      host: this.configService.getOrThrow('mail.host', { infer: true }), // Corrected
+      port: this.configService.getOrThrow('mail.port', { infer: true }), // Corrected
+      ignoreTLS: this.configService.getOrThrow('mail.ignoreTLS', {
+        infer: true,
+      }),
+      secure: this.configService.getOrThrow('mail.secure', { infer: true }),
+      requireTLS: this.configService.getOrThrow('mail.requireTLS', {
+        infer: true,
+      }),
       auth: {
-        user: configService.get('mail.user', { infer: true }),
-        pass: configService.get('mail.password', { infer: true }),
+        user: this.configService.getOrThrow('mail.user', { infer: true }),
+        pass: this.configService.getOrThrow('mail.password', { infer: true }),
       },
     });
+    console.log('transporter', this.transporter);
   }
 
   async sendMail({
@@ -31,23 +37,27 @@ export class MailerService {
     context: Record<string, unknown>;
   }): Promise<void> {
     let html: string | undefined;
+
     if (templatePath) {
+      console.log(templatePath);
       const template = await fs.readFile(templatePath, 'utf-8');
       html = Handlebars.compile(template, {
         strict: true,
       })(context);
     }
 
-    await this.transporter.sendMail({
-      ...mailOptions,
-      from: mailOptions.from
-        ? mailOptions.from
-        : `"${this.configService.get('mail.defaultName', {
-            infer: true,
-          })}" <${this.configService.get('mail.defaultEmail', {
-            infer: true,
-          })}>`,
-      html: mailOptions.html ? mailOptions.html : html,
-    });
+    return await this.transporter.sendMail(
+      {
+        ...mailOptions,
+        from: mailOptions.from,
+        html: mailOptions.html ? mailOptions.html : html,
+      },
+      function (error) {
+        if (error) {
+          return console.log('Error in sending mail');
+        }
+        console.log('Success');
+      },
+    );
   }
 }

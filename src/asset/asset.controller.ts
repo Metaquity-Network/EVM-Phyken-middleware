@@ -20,14 +20,14 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AssetNFTDetailsDto } from 'src/asset/dto/assetNFTDetails.dto';
-import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller({
   path: 'asset',
 })
 @ApiBearerAuth()
 @ApiTags('Asset')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard('jwt'))
 export class AssetController {
   constructor(private readonly assetService: AssetService) {}
 

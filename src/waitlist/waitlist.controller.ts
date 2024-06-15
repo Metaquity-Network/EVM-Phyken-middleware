@@ -7,12 +7,12 @@ import {
 } from '@nestjs/swagger';
 import { WaitlistDto } from './dto/waitlist.dto';
 import { WaitlistService } from './waitlist.service';
-import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('waitlist')
 @ApiBearerAuth()
 @Controller('waitlist')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard('jwt'))
 export class WaitlistController {
   constructor(private readonly waitlistService: WaitlistService) {}
 

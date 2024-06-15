@@ -4,12 +4,15 @@ import {
   Param,
   HttpException,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { WalletService } from './wallet.service';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('wallet')
 @Controller('wallet')
+@UseGuards(AuthGuard('jwt'))
 export class WalletController {
   constructor(private readonly walletService: WalletService) {}
 

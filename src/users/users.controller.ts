@@ -15,16 +15,16 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/guard/auth.guard';
 import { UserDto } from './dto/user.dto';
 import { Request } from 'express';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller({
   path: 'user',
 })
 @ApiBearerAuth()
 @ApiTags('users')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard('jwt'))
 export class UsersController {
   constructor(private usersService: UsersService) {}
 

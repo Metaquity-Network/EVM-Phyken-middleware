@@ -18,14 +18,14 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
-import { AuthGuard } from 'src/auth/guard/auth.guard';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller({
   path: 'licenses',
 })
 @ApiBearerAuth()
 @ApiTags('Licenses')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard('jwt'))
 export class LicensesController {
   constructor(private licensesServices: LicensesService) {}
 

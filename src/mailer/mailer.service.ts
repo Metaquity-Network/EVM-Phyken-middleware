@@ -25,7 +25,6 @@ export class MailerService {
         pass: this.configService.getOrThrow('mail.password', { infer: true }),
       },
     });
-    console.log('transporter', this.transporter);
   }
 
   async sendMail({
@@ -39,7 +38,6 @@ export class MailerService {
     let html: string | undefined;
 
     if (templatePath) {
-      console.log(templatePath);
       const template = await fs.readFile(templatePath, 'utf-8');
       html = Handlebars.compile(template, {
         strict: true,
@@ -54,9 +52,9 @@ export class MailerService {
       },
       function (error) {
         if (error) {
-          return console.log('Error in sending mail');
+          return console.log('Error in sending mail to ' + mailOptions.to);
         }
-        console.log('Success');
+        console.log('Success set email to ' + mailOptions.to);
       },
     );
   }

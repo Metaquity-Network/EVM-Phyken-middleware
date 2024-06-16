@@ -19,9 +19,7 @@ import { WaitlistService } from './waitlist.service';
 import { AuthGuard } from 'src/auth/guard/auth.guard';
 
 @ApiTags('waitlist')
-@ApiBearerAuth()
 @Controller('waitlist')
-@UseGuards(AuthGuard)
 export class WaitlistController {
   constructor(private readonly waitlistService: WaitlistService) {}
 
@@ -33,6 +31,8 @@ export class WaitlistController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @ApiResponse({ status: 500, description: 'Internal Server Error.' })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   async create(@Body() createWaitlistDto: WaitlistDto) {
     return this.waitlistService.create(createWaitlistDto);
   }

@@ -11,6 +11,7 @@ import { Wallet } from 'ethers';
 import { WalletSchema } from 'src/wallet/wallet.schema';
 import { UsersService } from 'src/users/users.service';
 import { User, UserSchema } from 'src/users/user.schema';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { User, UserSchema } from 'src/users/user.schema';
     ]),
     JwtModule.register({}),
     AuthModule,
+    MailModule,
   ],
   controllers: [WaitlistController],
   providers: [

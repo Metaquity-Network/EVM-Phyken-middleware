@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Email Confirmation</title>
+  <style>
+    .card {
+      border-width: 1px;
+      border-style: solid;
+      border-color: #E0E0E0;
+      border-radius: 3px;
+      padding: 16px;
+      max-width: 512px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .title {
+      color: #202124;
+      width: 100%;
+    }
+    ul {
+      color: #202124;
+    }
+    .button {
+      display: inline-block;
+      padding: 10px 20px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      background-color: rgb(72 185 108);
+      text-align: center;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+    .button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="title">
+      <h2>Email Confirmation</h2>
+    </div>
+    <p>GM <strong><%= user.name %></strong>,</p>
+    <p>Thank you for registering with Phyken Network. Please confirm your email address by clicking the button below:</p>
+    <a href="<%= url %>" class="button">Confirm Email</a>
+    <br> <br>
+    <div style="color: #757575; margin-left: auto;  margin-right: auto; text-align: center;">
+      <small>⚡ This is an automated email, please do not reply ⚡</small> <br>
+      <small><a href="https://phyken.network">Phyken Network - 2024</a></small>
+    </div>
+  </div>
+</body>
+</html>

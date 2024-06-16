@@ -15,10 +15,12 @@ import { UsersModule } from './users/users.module';
 import { LicensesModule } from './licenses/licenses.module';
 import { AssetModule } from './asset/asset.module';
 import { WaitlistModule } from './waitlist/waitlist.module';
+import { MailModule } from './mail/mail.module';
+import { MailerModule } from './mailer/mailer.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: ['.env'] }),
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({
@@ -32,6 +34,8 @@ import { WaitlistModule } from './waitlist/waitlist.module';
     LicensesModule,
     AssetModule,
     WaitlistModule,
+    MailModule,
+    MailerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

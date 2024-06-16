@@ -20,17 +20,19 @@ export class WaitlistService {
     private configService: ConfigService,
   ) {}
 
-  async create(waitlistDto: WaitlistDto): Promise<Waitlist> {
+  async createWaitlist(waitlistDto: WaitlistDto): Promise<Waitlist> {
     try {
       const timestamp = Date.now().toString();
       const hash = this.generateHash(waitlistDto.email, timestamp);
 
-      const createdInvestment = new this.waitlistModel({
+      const createdWaitlist = new this.waitlistModel({
         ...waitlistDto,
         verificationHash: hash,
         timestamp: timestamp,
+        referralCode: this.generateReferralCode(),
+        referredBy: waitlistDto.referralCode,
       });
-      const savedWaitlist = await createdInvestment.save();
+      const savedWaitlist = await createdWaitlist.save();
 
       await this.mailService.verifyWaitlistEmail({
         to: waitlistDto.email,
@@ -57,6 +59,10 @@ export class WaitlistService {
     )
       .update(email + timestamp)
       .digest('hex');
+  }
+
+  private generateReferralCode(): string {
+    return Math.random().toString(36).substring(2, 10);
   }
 
   async verifyEmail(hash: string): Promise<boolean> {

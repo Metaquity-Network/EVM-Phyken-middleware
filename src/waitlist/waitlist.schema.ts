@@ -38,6 +38,12 @@ export class Waitlist {
   @Prop({ default: false })
   isVerified: boolean;
 
+  @Prop({ unique: true })
+  referralCode: string;
+
+  @Prop()
+  referredBy?: string;
+
   @Prop({ default: Date.now, required: true })
   createdAt: Date;
 }

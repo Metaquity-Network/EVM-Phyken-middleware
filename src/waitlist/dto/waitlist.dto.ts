@@ -53,4 +53,9 @@ export class WaitlistDto {
   @IsBoolean()
   @IsNotEmpty()
   agreeToStoreData: boolean;
+
+  @ApiProperty({ description: 'Referral code' })
+  @IsOptional()
+  @IsString()
+  referralCode?: string;
 }

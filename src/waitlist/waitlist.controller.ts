@@ -34,7 +34,7 @@ export class WaitlistController {
   @ApiBearerAuth()
   @UseGuards(AuthGuard)
   async create(@Body() createWaitlistDto: WaitlistDto) {
-    return this.waitlistService.create(createWaitlistDto);
+    return this.waitlistService.createWaitlist(createWaitlistDto);
   }
 
   @Get('verify')

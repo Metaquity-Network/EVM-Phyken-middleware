@@ -45,4 +45,28 @@ export class MailService {
       html: html,
     });
   }
+
+  async waitlistConfirmation(mailData: MailData): Promise<void> {
+    const workingDirectory =
+      this.configService.getOrThrow('app.workingDirectory', {
+        infer: true,
+      }) || process.cwd();
+    const templatePath = path.join(
+      workingDirectory,
+      'src',
+      'mail',
+      'mail-templates',
+      'waitlist-confirmation.ejs',
+    );
+
+    const html = await ejs.renderFile(templatePath, {
+      user: { name: mailData.firstName },
+    });
+
+    return await this.mailerService.sendMail({
+      to: mailData.to,
+      subject: 'Phyken Network Email verification',
+      html: html,
+    });
+  }
 }

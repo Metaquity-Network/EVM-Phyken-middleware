@@ -82,6 +82,10 @@ export class WaitlistService {
 
     waitlistEntry.isVerified = true;
     await waitlistEntry.save();
+    await this.mailService.waitlistConfirmation({
+      to: waitlistEntry.email,
+      firstName: waitlistEntry.firstName,
+    });
     return true;
   }
 }

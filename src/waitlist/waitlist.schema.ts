@@ -44,6 +44,15 @@ export class Waitlist {
   @Prop()
   referredBy?: string;
 
+  @Prop({ unique: true, required: true })
+  walletAddress: string;
+
+  @Prop({ unique: true, required: true })
+  telegramId: string;
+
+  @Prop({ unique: true, required: true })
+  twitterId: string;
+
   @Prop({ default: Date.now, required: true })
   createdAt: Date;
 }

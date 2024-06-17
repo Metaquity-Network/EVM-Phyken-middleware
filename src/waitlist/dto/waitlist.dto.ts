@@ -54,6 +54,21 @@ export class WaitlistDto {
   @IsNotEmpty()
   agreeToStoreData: boolean;
 
+  @ApiProperty({ description: '0x123....' })
+  @IsString()
+  @IsNotEmpty()
+  walletAddress: string;
+
+  @ApiProperty({ description: '@telegram' })
+  @IsString()
+  @IsNotEmpty()
+  telegramId: string;
+
+  @ApiProperty({ description: '@twitter' })
+  @IsString()
+  @IsNotEmpty()
+  twitterId: string;
+
   @ApiProperty({ description: 'Referral code' })
   @IsOptional()
   @IsString()

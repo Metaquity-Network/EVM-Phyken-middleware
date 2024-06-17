@@ -14,13 +14,13 @@ export class Waitlist {
   @Prop({ required: true })
   lastName: string;
 
-  @Prop()
+  @Prop({ required: true })
   nationality: string;
 
   @Prop({ required: true })
   investmentAmount: string;
 
-  @Prop()
+  @Prop({ required: false })
   additionalInfo: string;
 
   @Prop({ default: false })
@@ -29,7 +29,31 @@ export class Waitlist {
   @Prop({ required: true })
   agreeToStoreData: boolean;
 
-  @Prop({ default: Date.now })
+  @Prop()
+  verificationHash: string;
+
+  @Prop()
+  timestamp: string;
+
+  @Prop({ default: false })
+  isVerified: boolean;
+
+  @Prop({ unique: true })
+  referralCode: string;
+
+  @Prop()
+  referredBy?: string;
+
+  @Prop({ unique: true, required: true })
+  walletAddress: string;
+
+  @Prop({ unique: true, required: true })
+  telegramId: string;
+
+  @Prop({ unique: true, required: true })
+  twitterId: string;
+
+  @Prop({ default: Date.now, required: true })
   createdAt: Date;
 }
 

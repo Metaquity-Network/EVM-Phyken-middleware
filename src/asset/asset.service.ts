@@ -111,7 +111,6 @@ export class AssetService {
         )
         .exec();
     } catch (error) {
-      console.log(error);
       throw new HttpException(
         'Error fetching asset by ID',
         HttpStatus.INTERNAL_SERVER_ERROR,

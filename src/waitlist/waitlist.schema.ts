@@ -14,10 +14,10 @@ export class Waitlist {
   @Prop({ required: true })
   lastName: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   nationality: string;
 
-  @Prop({ required: true })
+  @Prop({ required: false })
   investmentAmount: string;
 
   @Prop({ required: false })
@@ -44,13 +44,13 @@ export class Waitlist {
   @Prop()
   referredBy?: string;
 
-  @Prop({ unique: true, required: true })
+  @Prop({ unique: true, required: false })
   walletAddress: string;
 
-  @Prop({ unique: true, required: true })
+  @Prop({ unique: true, required: false })
   telegramId: string;
 
-  @Prop({ unique: true, required: true })
+  @Prop({ unique: true, required: false })
   twitterId: string;
 
   @Prop({ default: Date.now, required: true })

@@ -2,6 +2,12 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class AssetNFTDetailsDto {
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    description: 'The id of the uploaded asset',
+    example: '1',
+  })
   id: string;
 
   @IsNotEmpty()

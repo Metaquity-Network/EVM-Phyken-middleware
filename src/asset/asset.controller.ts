@@ -86,7 +86,7 @@ export class AssetController {
     return await this.assetService.getAssetById(wallet, assetId);
   }
 
-  @Post('/updateNFTDetails/:id')
+  @Post('/updateNFTDetails')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Update NFT details of an asset' })
   @ApiResponse({

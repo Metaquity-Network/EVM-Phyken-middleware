@@ -1,29 +1,38 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsString } from 'class-validator';
 
 export class AssetNFTDetailsDto {
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({ type: String, example: 'nftID123' })
   id: string;
 
   @IsNotEmpty()
   @IsString()
-  @ApiProperty({ type: String, example: 'collectionID456' })
-  nftCollectionID: string;
-
-  @IsNotEmpty()
-  @IsNumber()
-  @ApiProperty({ type: Number, example: 1 })
-  nftItem: number;
-
-  @IsNotEmpty()
-  @IsString()
-  @ApiProperty({ type: String, example: 'block123' })
-  nftBlockMint: string;
+  @ApiProperty({
+    description: 'The contract address of the NFT token',
+    example: '0x122124134...',
+  })
+  tokenContract: string;
 
   @IsNotEmpty()
   @IsString()
-  @ApiProperty({ type: String, example: 'owner123' })
+  @ApiProperty({
+    description: 'The unique identifier of the token within the contract',
+    example: '1',
+  })
+  tokenID: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    description: 'The transaction number of the token minting process',
+    example: '0x122124134...',
+  })
+  tokenMintingTx: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty({
+    description: 'The current owner of the NFT token',
+    example: '0x122124134...',
+  })
   nftOwner: string;
 }

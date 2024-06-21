@@ -43,7 +43,6 @@ export class AssetService {
         lockPeriod: 6,
         minimumInvestment: 10000,
         dealValue: 1200000,
-        createdAt: new Date(),
       });
       return createdAsset;
     } catch (error) {
@@ -91,7 +90,7 @@ export class AssetService {
   }
 
   async updateAssetNFTDetails(assetNFTDetailsDto: AssetNFTDetailsDto) {
-    if (!assetNFTDetailsDto.nftBlockMint) {
+    if (!assetNFTDetailsDto.tokenMintingTx) {
       throw new NotFoundException('Asset not found');
     }
     try {

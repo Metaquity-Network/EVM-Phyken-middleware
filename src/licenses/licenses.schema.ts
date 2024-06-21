@@ -1,10 +1,10 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { IsString, IsDate, IsUrl, IsEnum } from 'class-validator';
+import { IsString, IsDate, IsUrl, IsEnum, IsNotEmpty } from 'class-validator';
 import { Document } from 'mongoose';
 
 export type LicensesDocument = Licenses & Document;
 
-enum LicenseStatus {
+export enum LicenseStatus {
   ACTIVE = 'Active',
   EXPIRED = 'Expired',
   SUSPENDED = 'Suspended',
@@ -14,26 +14,32 @@ enum LicenseStatus {
 export class Licenses {
   @Prop({ required: true })
   @IsString()
+  @IsNotEmpty()
   id: string;
 
   @Prop({ required: true, unique: true })
   @IsString()
+  @IsNotEmpty()
   licenseNumber: string;
 
   @Prop({ required: true })
   @IsString()
+  @IsNotEmpty()
   category: string;
 
   @Prop({ required: true })
   @IsDate()
+  @IsNotEmpty()
   licenseValidity: Date;
 
   @Prop({ required: true })
   @IsString()
+  @IsNotEmpty()
   country: string;
 
   @Prop({ required: true })
   @IsString()
+  @IsNotEmpty()
   state: string;
 
   @Prop()
@@ -44,16 +50,15 @@ export class Licenses {
   @IsEnum(LicenseStatus)
   licenseStatus: LicenseStatus;
 
-  @Prop({ required: true })
+  @Prop({ default: Date.now() })
   @IsDate()
-  uploadedAt: Date;
+  @IsNotEmpty()
+  createdAt: Date;
 
   @Prop({ required: true })
   @IsString()
+  @IsNotEmpty()
   createdBy: string;
 }
 
 export const LicensesSchema = SchemaFactory.createForClass(Licenses);
-
-// Ensure `createdAt` and `updatedAt` are automatically managed by Mongoose
-LicensesSchema.set('timestamps', true);

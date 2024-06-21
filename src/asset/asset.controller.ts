@@ -95,7 +95,14 @@ export class AssetController {
   })
   @ApiResponse({ status: 400, description: 'Invalid input data.' })
   @ApiBody({ type: AssetNFTDetailsDto })
-  async updateAssetNFTDetails(@Body() assetNFTDetailsDto: AssetNFTDetailsDto) {
-    return await this.assetService.updateAssetNFTDetails(assetNFTDetailsDto);
+  async updateAssetNFTDetails(
+    @Req() req: Request,
+    @Body() assetNFTDetailsDto: AssetNFTDetailsDto,
+  ) {
+    const wallet = req['wallet'];
+    return await this.assetService.updateAssetNFTDetails(
+      assetNFTDetailsDto,
+      wallet,
+    );
   }
 }

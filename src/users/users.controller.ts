@@ -66,6 +66,24 @@ export class UsersController {
     return await this.usersService.updateUserDetails(userUpdateDto, wallet);
   }
 
+  @Post('updateUserIdentity')
+  @ApiOperation({ summary: 'Update user Identity' })
+  @ApiResponse({ status: 200, description: 'Identity updated successfully' })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 401, description: 'Unauthorized' })
+  @HttpCode(HttpStatus.OK)
+  async updateUserIdentity(
+    @Req() req: Request,
+    @Body() identityUpdateDTO: any,
+  ) {
+    const wallet = req['wallet'];
+    console.log(wallet);
+    return await this.usersService.updateUserIdentity(
+      identityUpdateDTO,
+      wallet,
+    );
+  }
+
   @Get()
   @ApiOperation({ summary: 'Get user details' })
   @ApiResponse({

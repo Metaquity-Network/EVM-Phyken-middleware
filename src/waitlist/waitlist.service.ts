@@ -45,7 +45,9 @@ export class WaitlistService {
       return savedWaitlist;
     } catch (error) {
       if (error.code === 11000) {
-        throw new ConflictException('Email already exists');
+        throw new ConflictException(
+          'Email/Wallet address has already waitlist',
+        );
       }
       console.error('Failed to create waitlist entry:', error);
       throw new InternalServerErrorException('Internal server error');

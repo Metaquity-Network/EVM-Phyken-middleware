@@ -1,22 +1,7 @@
-import {
-  Controller,
-  Post,
-  Body,
-  UseGuards,
-  Get,
-  Query,
-  Res,
-} from '@nestjs/common';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBearerAuth,
-  ApiQuery,
-} from '@nestjs/swagger';
+import { Controller, Post, Body, Get, Query, Res } from '@nestjs/common';
+import { ApiTags, ApiOperation, ApiResponse, ApiQuery } from '@nestjs/swagger';
 import { WaitlistDto } from './dto/waitlist.dto';
 import { WaitlistService } from './waitlist.service';
-import { AuthGuard } from 'src/auth/guard/auth.guard';
 
 @ApiTags('waitlist')
 @Controller('waitlist')
@@ -31,8 +16,6 @@ export class WaitlistController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request.' })
   @ApiResponse({ status: 500, description: 'Internal Server Error.' })
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
   async create(@Body() createWaitlistDto: WaitlistDto) {
     return this.waitlistService.createWaitlist(createWaitlistDto);
   }

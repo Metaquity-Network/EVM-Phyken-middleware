@@ -17,73 +17,65 @@ export class LicensesService {
     @InjectModel(Licenses.name) private licensesModel: Model<LicensesDocument>,
   ) {}
 
-  async getAllLicenses(): Promise<Licenses[] | []> {
-    try {
-      const licenses = await this.licensesModel.find().exec();
-      if (!licenses) {
-        return licenses;
-      } else {
-        return [];
-      }
-    } catch (error) {
-      console.error('Error fetching licenses:', error);
-      throw new HttpException(
-        'Error fetching licenses',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+  async getAllLicenses(): Promise<Licenses[]> {
+    return this.handleDbOperation(
+      () => this.licensesModel.find().exec(),
+      'fetching licenses',
+    );
   }
 
   async uploadLicense(
     createdBy: string,
     licenseDto: LicensesDto,
   ): Promise<Licenses> {
-    const licenseData = {
+    const licenseData: Licenses = {
       id: uuidv4(),
       ...licenseDto,
       licenseValidity: new Date(licenseDto.licenseValidity),
       licenseStatus: LicenseStatus.ACTIVE,
-      uploadedAt: new Date(),
       createdAt: new Date(),
-      createdBy: createdBy,
+      createdBy,
     };
 
-    try {
-      const newLicense = new this.licensesModel(licenseData);
-      return await newLicense.save();
-    } catch (error) {
-      console.error('Error uploading license:', error);
-      throw new HttpException(
-        'Error uploading license',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    const newLicense = new this.licensesModel(licenseData);
+    return this.handleDbOperation(() => newLicense.save(), 'uploading license');
   }
 
-  async getLicenseByUser(wallet: string) {
-    try {
-      const userLicenses = await this.licensesModel
-        .find({ createdBy: wallet })
-        .exec();
-      return userLicenses;
-    } catch (error) {
-      console.error('Error fetching license by user:', error);
-      throw new HttpException(
-        'Error fetching license by user',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+  async getLicenseByUser(wallet: string): Promise<Licenses[]> {
+    return this.handleDbOperation(
+      () => this.licensesModel.find({ createdBy: wallet }).exec(),
+      'fetching licenses by user',
+    );
   }
-  async verifyUploadedLicense(licenseID: string, wallet: any) {
+
+  async verifyUploadedLicense(
+    licenseID: string,
+    wallet: string,
+  ): Promise<Licenses[]> {
+    return this.handleDbOperation(
+      () =>
+        this.licensesModel.find({ createdBy: wallet, id: licenseID }).exec(),
+      'verifying uploaded license',
+    );
+  }
+
+  private async handleDbOperation<T>(
+    operation: () => Promise<T>,
+    action: string,
+  ): Promise<T> {
     try {
-      const userLicenses = await this.licensesModel
-        .find({ createdBy: wallet, licenseID: licenseID })
-        .exec();
-      return userLicenses;
+      return await operation();
     } catch (error) {
-      console.error('Error fetching license by user:', error);
+      console.error(`Error ${action}:`, error);
+      if (error.code === 11000) {
+        const duplicateKey = Object.keys(error.keyValue)[0];
+        throw new HttpException(
+          `Duplicate key error occurred while ${action}: ${duplicateKey.charAt(0).toUpperCase() + duplicateKey.slice(1)} already exists`,
+          HttpStatus.CONFLICT,
+        );
+      }
       throw new HttpException(
-        'Error fetching license by user',
+        `Database error occurred while ${action}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
     }

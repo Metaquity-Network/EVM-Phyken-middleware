@@ -4,9 +4,24 @@ import { Document } from 'mongoose';
 export type UserDocument = User & Document;
 
 @Schema()
+export class IdentityDetails {
+  @Prop({ required: true })
+  identityContract: string;
+
+  @Prop({ required: true })
+  transactionHash: string;
+}
+
+export const IdentityDetailsSchema =
+  SchemaFactory.createForClass(IdentityDetails);
+
+@Schema()
 export class User {
   @Prop({ required: true })
   wallet: string;
+
+  @Prop({ type: IdentityDetailsSchema, required: false })
+  identityDetails: IdentityDetails;
 
   @Prop({ required: false })
   firstName: string;

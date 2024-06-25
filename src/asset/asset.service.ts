@@ -7,7 +7,7 @@ import {
 import { AssetDto } from 'src/asset/dto/asset.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Asset } from 'src/asset/asset.schema';
-import mongoose, { Model } from 'mongoose';
+import { Model } from 'mongoose';
 import { LicensesService } from 'src/licenses/licenses.services';
 import { v4 as uuidv4 } from 'uuid';
 import { AssetNFTDetailsDto } from 'src/asset/dto/assetNFTDetails.dto';
@@ -43,7 +43,6 @@ export class AssetService {
         lockPeriod: 6,
         minimumInvestment: 10000,
         dealValue: 1200000,
-        createdAt: new Date(),
       });
       return createdAsset;
     } catch (error) {
@@ -90,20 +89,22 @@ export class AssetService {
     }
   }
 
-  async updateAssetNFTDetails(assetNFTDetailsDto: AssetNFTDetailsDto) {
-    if (!assetNFTDetailsDto.nftBlockMint) {
+  async updateAssetNFTDetails(
+    assetNFTDetailsDto: AssetNFTDetailsDto,
+    wallet: string,
+  ) {
+    if (!assetNFTDetailsDto.tokenMintingTx) {
       throw new NotFoundException('Asset not found');
     }
     try {
-      const objectId = new mongoose.Types.ObjectId(assetNFTDetailsDto.id);
       return await this.assetModel
-        .findByIdAndUpdate(
-          { _id: objectId },
+        .findOneAndUpdate(
+          { id: assetNFTDetailsDto.id },
           {
             $set: {
               nftDetails: {
                 ...assetNFTDetailsDto,
-                createdAt: new Date(),
+                createdBy: wallet,
               },
             },
           },

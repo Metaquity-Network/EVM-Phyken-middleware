@@ -54,7 +54,7 @@ export class LicensesController {
       );
       return result;
     } catch (error) {
-      console.error('Upload License Error:', error);
+      console.error('Upload License Error:', error.response);
       throw new BadRequestException(error.message);
     }
   }

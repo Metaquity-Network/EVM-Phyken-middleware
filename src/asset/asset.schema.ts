@@ -6,18 +6,18 @@ export type AssetDocument = Asset & Document;
 @Schema()
 export class NftDetails {
   @Prop({ required: true })
-  nftCollectionID: string;
+  tokenContract: string;
 
   @Prop({ required: true })
-  nftItem: string;
+  tokenID: string;
 
   @Prop({ required: true })
-  nftBlockMint: string;
+  tokenMintingTx: string;
 
   @Prop({ required: true })
   nftOwner: string;
 
-  @Prop({ required: true })
+  @Prop({ default: new Date() })
   createdAt: string;
 
   @Prop({ required: true })
@@ -92,7 +92,7 @@ export class Asset {
   @Prop({ type: NftFractionalizationDetailsSchema, required: false })
   nftFractionalizationDetails: NftFractionalizationDetails;
 
-  @Prop({ required: true })
+  @Prop({ default: new Date(), required: true })
   createdAt: string;
 
   @Prop({ required: true })

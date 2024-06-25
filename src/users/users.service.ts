@@ -111,4 +111,28 @@ export class UsersService {
       );
     }
   }
+
+  async updateUserIdentity(identityDetails: any, wallet: string) {
+    try {
+      return await this.userModel
+        .findOneAndUpdate(
+          {
+            wallet: wallet,
+          },
+          {
+            $set: {
+              identityDetails: {
+                ...identityDetails,
+              },
+            },
+          },
+        )
+        .exec();
+    } catch (error) {
+      throw new HttpException(
+        'Error updating user',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 }
